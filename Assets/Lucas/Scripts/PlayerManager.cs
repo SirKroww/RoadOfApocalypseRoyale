@@ -9,6 +9,7 @@ public class PlayerManager : MonoBehaviour
     public float maxHealth;
     public float currentShield;
     public float maxShield;
+    public WeaponScript currentWeapon;
     
 
     void Awake()
@@ -51,6 +52,12 @@ public class PlayerManager : MonoBehaviour
         
 
         print(string.Format("current Life: {0} \n current Shield : {1}", currentLife, currentShield));
+    }
+
+
+    public void SetCurrentWeapon(WeaponScript weaponBullet)
+    {
+        currentWeapon = weaponBullet;
     }
 
 

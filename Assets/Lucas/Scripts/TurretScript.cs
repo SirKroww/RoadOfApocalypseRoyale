@@ -12,8 +12,6 @@ public class TurretScript : MonoBehaviour
 
     public float turretDamage;
     public float turretBulletSpeed;
-    public float turretCritChance;
-    public float turretCritDamage;
 
 
 
@@ -46,11 +44,6 @@ public class TurretScript : MonoBehaviour
         while(Firing)
         {
             bulletInstance = Instantiate(bulletPrefab, bulletSpawn.transform.position, bulletSpawn.transform.rotation);
-            bulletInstance.GetComponent<bulletScript>().damage = turretDamage;
-            bulletInstance.GetComponent<bulletScript>().critChance = turretCritChance;
-            bulletInstance.GetComponent<bulletScript>().bulletSpeed = turretBulletSpeed;
-            bulletInstance.GetComponent<bulletScript>().critDamage = turretCritDamage;
-            bulletInstance.GetComponent<bulletScript>().isInit = true;
             yield return new WaitForSeconds(attackRate);
         }
         

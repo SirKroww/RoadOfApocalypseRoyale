@@ -14,6 +14,9 @@ public class PlayerController : MonoBehaviour
     private float direction;
     private float directionRightAngle;
     public Transform playerCam;
+    public float maxSpeed;
+
+    bool canFire = true;
 
 
     void Start()
@@ -31,6 +34,10 @@ public class PlayerController : MonoBehaviour
         RotateCar();
         Move();
         CamFollow();
+        if(Input.GetButton("Fire1"))
+        {
+            PlayerShoot();
+        }
 
     }
 
@@ -50,6 +57,29 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    IEnumerator PlayerFiring(WeaponScript currentWeapon)
+    {
+        GameObject bulletInstance = Instantiate(currentWeapon.GetComponent<WeaponScript>().bulletPrefab, currentWeapon.transform.position, currentWeapon.transform.rotation);
+        bulletInstance.GetComponent<bulletScript>().Shooter = this.gameObject;
+        canFire = false;
+        yield return new WaitForSeconds(currentWeapon.attackRate);
+        canFire = true;
+
+    }
+
+    public void PlayerShoot()
+    {
+        WeaponScript currentWeapon = this.GetComponent<PlayerManager>().currentWeapon;
+        if (currentWeapon && canFire)
+        {
+            StartCoroutine(PlayerFiring(currentWeapon));
+        }
+
+
+
+    }
+
+
 
     public void GetInput()
     {
@@ -62,7 +92,9 @@ public class PlayerController : MonoBehaviour
     private void Move()
     {
         Vector2 speed = transform.up * (yInput * acceleration);
-        rb.AddForce(speed);
+        //rb.AddForce(speed);
+        rb.velocity = speed;
+        
     }
 
     private void RotateCar()

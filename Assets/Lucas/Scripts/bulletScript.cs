@@ -5,14 +5,11 @@ using UnityEngine;
 public class bulletScript : MonoBehaviour
 {
 
-    float despawnTime = 3;
+    public float despawnTime = 3;
     public float damage;
-    public bool isCritical;
-    [Range(0,1)]
-    public float critChance;
-    public float critDamage;
     public float bulletSpeed;
     public bool isInit = false;
+    public GameObject Shooter;
 
 
     Rigidbody2D rb;
@@ -21,35 +18,28 @@ public class bulletScript : MonoBehaviour
     {
         rb = this.GetComponent<Rigidbody2D>();
 
-        rb.AddForce(transform.right * bulletSpeed , ForceMode2D.Impulse);
+        rb.AddForce(transform.up * bulletSpeed , ForceMode2D.Impulse);
 
-        isCritical = Random.value < critChance ? true : false;
-        if(isCritical)
-        {
-            damage *= critDamage;
-        }
+        
     }
 
 
     void FixedUpdate()
     {
-        if(isInit)
+        if (despawnTime > 0)
         {
-            if (despawnTime > 0)
-            {
-                despawnTime -= Time.fixedDeltaTime;
-            }
-            else
-            {
-                DestroyBullet();
-            }
+            despawnTime -= Time.fixedDeltaTime;
         }
-        
+        else
+        {
+            DestroyBullet();
+        }
+
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player") && Shooter != collision.gameObject)
         {
             collision.gameObject.GetComponent<PlayerManager>().PlayerHit(damage);
             DestroyBullet();
@@ -61,10 +51,7 @@ public class bulletScript : MonoBehaviour
         }
     }
 
-    private void OnTrigger(Collision2D collision)
-    {
-        
-    }
+
 
 
     private void DestroyBullet()

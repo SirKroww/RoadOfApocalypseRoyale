@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class ItemScript : MonoBehaviour
 {
-
-    // montant de l'objet ( heal, shield, ammos ) 
+    public enum ItemTypes { Heal, Shield, Weapon}
+    public ItemTypes itemType;
+    
+    // montant de l'objet ( heal and shield) 
     public float amount;
+    
     public bool isCollectible;
+    public GameObject weaponItem;
 
     
 
@@ -18,7 +22,21 @@ public class ItemScript : MonoBehaviour
             // Vérifie si l'objet peut être collecté
             if(isCollectible)
             {
-                collision.GetComponent<PlayerManager>().PlayerHeal(amount);
+                switch(itemType)
+                {
+                    case ItemTypes.Heal:
+                        collision.GetComponent<PlayerManager>().PlayerHeal(amount);
+                        break;
+                    case ItemTypes.Shield:
+                        collision.GetComponent<PlayerManager>().PlayerShield(amount);
+                        break;
+                    case ItemTypes.Weapon:
+                        //collision.GetComponent<PlayerManager>().PlayerHeal(amount);
+                        break;
+
+
+
+                }
                 Destroy(this.gameObject);
             }
             else
